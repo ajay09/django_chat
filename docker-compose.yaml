@@ -1,0 +1,16 @@
+version: '3.9'
+
+services:
+  backend:
+    build:
+      context: ./djchat
+      dockerfile: Dockerfile
+    image: backend-image
+    container_name: backend-container
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./djchat:/home/src
+    environment:
+      - SECRET_KEY='asdfasdfw4532django-insecure-g7$pl$i^db@tp$g=_ed8&)ky0s86(s_o%gi9d(lebk^b#ypz^d'
+      - DEBUG=True
+      - ALLOWED_HOSTS=127.0.0.1,localhost
