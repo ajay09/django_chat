@@ -3,7 +3,7 @@ from django.db import models
 
 
 def category_icon_upload_path(instance, filename):
-    return f"categor/{instance.id}/icon/{filename}"
+    return f"category/{instance.id}/icon/{filename}"
 
 
 class Category(models.Model):
