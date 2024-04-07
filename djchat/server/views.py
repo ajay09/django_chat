@@ -1,4 +1,4 @@
-from rest_framework.exceptions import ValidationError
+from rest_framework.exceptions import AuthenticationFailed, ValidationError
 from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
 from server.models import Server
@@ -13,6 +13,9 @@ class ServerListViewSet(ViewSet):
         qty = request.query_params.get("qty", None)
         by_user = request.query_params.get("by_user", "").lower() == "true"
         id = request.query_params.get("id", None)
+
+        if by_user or id and not request.user.is_authenticated:
+            raise AuthenticationFailed("You must login first.")
 
         if category:
             self.queryset = self.queryset.filter(category__name=category)
