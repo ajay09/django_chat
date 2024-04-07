@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.db import models
+from django.shortcuts import get_object_or_404
 
 
 def category_icon_upload_path(instance, filename):
@@ -13,6 +14,13 @@ class Category(models.Model):
 
     def __str__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        if self.id:
+            existing_object = get_object_or_404(Category, id=self.id)
+            if existing_object.icon:
+                existing_object.icon.delete(save=False)
+        super().save(*args, **kwargs)
 
 
 class Server(models.Model):
