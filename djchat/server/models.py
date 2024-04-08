@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.db import models
+from django.dispatch import receiver
 from django.shortcuts import get_object_or_404
 
 
@@ -21,6 +22,14 @@ class Category(models.Model):
             if existing_object.icon:
                 existing_object.icon.delete(save=False)
         super().save(*args, **kwargs)
+
+    @receiver(models.signals.post_delete, sender="server.Category")
+    def category_delete_icon(sender, instance, **kwargs):
+        for field in instance._meta.fields:
+            if field.name == "icon":
+                file = getattr(instance, field.name)
+                if file:
+                    file.delete(save=False)
 
 
 class Server(models.Model):
