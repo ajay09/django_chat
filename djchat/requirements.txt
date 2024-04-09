@@ -3,6 +3,7 @@ attrs==23.2.0
 black==24.3.0
 click==8.1.7
 Django==5.0.4
+django-cors-headers==4.3.1
 djangorestframework==3.15.1
 drf-spectacular==0.27.2
 flake8==7.0.0
@@ -21,7 +22,5 @@ python-dotenv==1.0.1
 PyYAML==6.0.1
 referencing==0.34.0
 rpds-py==0.18.0
-setuptools==69.2.0
 sqlparse==0.4.4
 uritemplate==4.1.1
-wheel==0.43.0

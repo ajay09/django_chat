@@ -30,6 +30,7 @@ ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS").split(",")
 
 if DEBUG:
     print(">>>>>> Starting server in DEBUG mode.")
+    print(ALLOWED_HOSTS)
 
 # Application definition
 
@@ -43,6 +44,7 @@ INSTALLED_APPS = [
     # External
     "drf_spectacular",
     "rest_framework",
+    "corsheaders",
     # Internal
     "server",
     "account",
@@ -51,6 +53,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -173,3 +176,7 @@ SPECTACULAR_SETTINGS = {
     "DESCRIPTION": "This is a chat application",
     "SERVE_INCLUDE_SCHEMA": True,
 }
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+]
