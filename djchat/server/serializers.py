@@ -14,6 +14,7 @@ class ServerSerializer(serializers.ModelSerializer):
     num_members = serializers.SerializerMethodField()
     # same as the related name
     channel_server = ChannelSerializer(many=True)
+    category = serializers.StringRelatedField(many=True)
 
     class Meta:
         model = Server
@@ -29,3 +30,10 @@ class ServerSerializer(serializers.ModelSerializer):
         if not self.context.get("with_num_members", False):
             output.pop("num_members")
         return output
+
+
+class CategorySerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Category
+        fields = "__all__"

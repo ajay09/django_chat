@@ -2,6 +2,9 @@ FROM --platform=arm64 python:3-alpine
 
 ENV PYTHONUNBUFFERED 1
 
+RUN apk update && apk upgrade
+RUN apk add --no-cache sqlite
+
 WORKDIR /home/src
 
 COPY ./requirements.txt ./

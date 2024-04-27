@@ -1,10 +1,20 @@
 from django.db.models import Count
+from drf_spectacular.utils import extend_schema
 from rest_framework.exceptions import AuthenticationFailed, ValidationError
 from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
-from server.models import Server
+from server.models import Category, Server
 from server.schema import server_list_docs
-from server.serializers import ServerSerializer
+from server.serializers import CategorySerializer, ServerSerializer
+
+
+class CategoryListViewSet(ViewSet):
+    queryset = Category.objects.all()
+
+    @extend_schema(responses=CategorySerializer)
+    def list(self, request):
+        serializer = CategorySerializer(self.queryset, many=True)
+        return Response(serializer.data)
 
 
 @server_list_docs
@@ -19,8 +29,8 @@ class ServerListViewSet(ViewSet):
         id = request.query_params.get("id", None)
         with_num_members = request.query_params.get("with_num_members", "").lower() == "true"
 
-        if by_user or id and not request.user.is_authenticated:
-            raise AuthenticationFailed("You must login first.")
+        # if by_user or id and not request.user.is_authenticated:
+        #     raise AuthenticationFailed("You must login first.")
 
         if category:
             self.queryset = self.queryset.filter(category__name=category)

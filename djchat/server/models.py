@@ -32,6 +32,9 @@ class Category(models.Model):
                 if file:
                     file.delete(save=False)
 
+    def __str__(self) -> str:
+        return self.name
+
 
 def server_icon_upload_path(instance, filename):
     return f"server/{instance.id}/icon/{filename}"

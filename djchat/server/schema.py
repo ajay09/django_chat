@@ -32,7 +32,6 @@ server_list_docs = extend_schema(
         OpenApiParameter(
             name="by_server_id",
             type=OpenApiTypes.INT,
-            location=OpenApiParameter.QUERY,
             description="Get server by id.",
         ),
     ],
