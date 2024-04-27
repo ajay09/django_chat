@@ -11,8 +11,10 @@ class MessageViewSet(ViewSet):
     @list_message_docs
     def list(Self, request):
         channel_id = request.query_params.get("channel_id")
-        conversation = ChannelConversation.objects.get(channel_id=channel_id)
-        messages = conversation.messages.all()
-
-        serializer = MessageSerializer(messages, many=True)
-        return Response(serializer.data)
+        try:
+            conversation = ChannelConversation.objects.get(channel_id=channel_id)
+            messages = conversation.messages.all()
+            serializer = MessageSerializer(messages, many=True)
+            return Response(serializer.data)
+        except ChannelConversation.DoesNotExist:
+            return Response([])

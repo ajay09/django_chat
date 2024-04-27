@@ -14,7 +14,7 @@ import { useEffect } from "react";
 
 const Server = () => {
   const navigate = useNavigate();
-  const {serverId, channelId} = useParams();
+  const { serverId, channelId } = useParams();
 
   const { dataCRUD, error, isLoading, fetchData } = useCrud<Server>(
     [],
@@ -34,8 +34,9 @@ const Server = () => {
     if (!channelId) {
       return true;
     }
-    return dataCRUD.some((server: Server) => server.channel_server.some(
-      (channel) => channel.id === parseInt(channelId)
+    return dataCRUD.some((server: Server) =>
+      server.channel_server.some(
+        (channel) => channel.id === parseInt(channelId)
       )
     );
   };
@@ -44,20 +45,20 @@ const Server = () => {
     if (!isChannel()) {
       navigate(`/server/${serverId}`);
     }
-  }, [isChannel, channelId])
+  }, [isChannel, channelId]);
 
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
       <PrimaryAppBar />
       <PrimaryDraw>
-        <UserServers open={false} data={dataCRUD}/>
+        <UserServers open={false} data={dataCRUD} />
       </PrimaryDraw>
       <SecondaryDraw>
-        <ServerChannels data={dataCRUD}/>
+        <ServerChannels data={dataCRUD} />
       </SecondaryDraw>
       <Main>
-        <MessageInterface/>
+        <MessageInterface data={dataCRUD} />
       </Main>
     </Box>
   );
