@@ -17,7 +17,7 @@ const Server = () => {
 
   const { dataCRUD, error, isLoading, fetchData } = useCrud<Server>(
     [],
-    `/servers/?by_serverid=${serverId}`
+    `/servers/?id=${serverId}`
   );
 
   if (error !== null && error.message === "400") {
