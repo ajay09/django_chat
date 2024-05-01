@@ -59,7 +59,7 @@ const PopularChannels: React.FC<Props> = ({ open }) => {
             dense={true}
           >
             <Link
-              to={`/server/${item.id}`}
+              to={`/servers/${item.id}`}
               style={{ textDecoration: "none", color: "inherit" }}
             >
               <ListItemButton sx={{ minHeight: 0 }}>

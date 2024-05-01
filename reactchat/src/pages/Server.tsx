@@ -6,10 +6,9 @@ import Main from "./templates/Main";
 import MessageInterface from "../components/Main/MessageInterface";
 import ServerChannels from "../components/SecondaryDraw/ServerChannels";
 import UserServers from "../components/PrimaryDraw/UserServers";
-
-import { useNavigate, useParams } from "react-router-dom";
-import useCrud from "../hooks/useCrud";
+import { useParams, useNavigate } from "react-router-dom";
 import { Server } from "../@types/server.d";
+import useCrud from "../hooks/useCrud";
 import { useEffect } from "react";
 
 const Server = () => {
@@ -18,7 +17,7 @@ const Server = () => {
 
   const { dataCRUD, error, isLoading, fetchData } = useCrud<Server>(
     [],
-    `/servers/?id=${serverId}`
+    `/servers/?by_serverid=${serverId}`
   );
 
   if (error !== null && error.message === "400") {
@@ -30,11 +29,13 @@ const Server = () => {
     fetchData();
   }, []);
 
+  // Check if the channelId is valid by searching for it in the data fetched from the API
   const isChannel = (): Boolean => {
     if (!channelId) {
       return true;
     }
-    return dataCRUD.some((server: Server) =>
+
+    return dataCRUD.some((server) =>
       server.channel_server.some(
         (channel) => channel.id === parseInt(channelId)
       )
@@ -43,7 +44,7 @@ const Server = () => {
 
   useEffect(() => {
     if (!isChannel()) {
-      navigate(`/server/${serverId}`);
+      navigate(`/servers/${serverId}`);
     }
   }, [isChannel, channelId]);
 
@@ -58,7 +59,7 @@ const Server = () => {
         <ServerChannels data={dataCRUD} />
       </SecondaryDraw>
       <Main>
-        <MessageInterface data={dataCRUD} />
+        <MessageInterface />
       </Main>
     </Box>
   );
