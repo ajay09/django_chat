@@ -90,12 +90,27 @@ const messageInterface = (props: ServerChannelProps) => {
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       e.preventDefault();
-      sendJsonMessage({
-        type: "message",
-        message,
-      } as SendMessageData);
+      if (message.length > 0) {
+        sendJsonMessage({
+          type: "message",
+          message,
+        } as SendMessageData);
+      }
     }
   };
+
+  function formatTimeStamp(timestamp: string) : string {
+    const date = new Date(Date.parse(timestamp));
+    const formattedDate = `${
+      date.getMonth() + 1
+    }/${date.getDate()}/${date.getFullYear()}`;
+    const formattedTime = date.toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+    });
+    return `${formattedDate} at ${formattedTime}`;
+  }
 
   return (
     <>
@@ -126,7 +141,7 @@ const messageInterface = (props: ServerChannelProps) => {
             sx={{
               overflow: "hidden",
               p: 0,
-              height: `calc(100vh - 100px - 90px)`
+              height: `calc(100vh - 100px - 90px)`,
             }}
           >
             <Scroll>
@@ -143,14 +158,23 @@ const messageInterface = (props: ServerChannelProps) => {
                           variant: "body2",
                         }}
                         primary={
-                          <Typography
-                            component="span"
-                            variant="body1"
-                            color="text.primary"
-                            sx={{ display: "inline", fontW: 600 }}
-                          >
-                            {msg.sender}
-                          </Typography>
+                          <>
+                            <Typography
+                              component="span"
+                              variant="body1"
+                              color="text.primary"
+                              sx={{ display: "inline", fontW: 600 }}
+                            >
+                              {msg.sender}
+                            </Typography>
+                            <Typography
+                              component="span"
+                              variant="caption"
+                              color="textSecondary"
+                            >
+                              {"   "} {formatTimeStamp(msg.timestamp)}
+                            </Typography>
+                          </>
                         }
                         secondary={
                           <React.Fragment>

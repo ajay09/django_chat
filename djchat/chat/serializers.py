@@ -15,4 +15,5 @@ class MessageSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         message = super().to_representation(instance)
         message["content"] = ast.literal_eval(message["content"])
+        message["timestamp"] = message.pop("created_at")
         return message
