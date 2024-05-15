@@ -1,4 +1,5 @@
 from drf_spectacular.utils import extend_schema
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
 
@@ -9,6 +10,7 @@ from .serializers import AccountSerializer
 
 class AccountViewset(ViewSet):
     queryset = Account.objects.all()
+    permission_classes = [IsAuthenticated]
 
     @user_list_docs
     def list(self, request):

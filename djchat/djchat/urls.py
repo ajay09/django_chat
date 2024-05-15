@@ -31,7 +31,7 @@ router = DefaultRouter()
 router.register("api/servers", ServerListViewSet)
 router.register("api/servers/category", CategoryListViewSet)
 router.register("api/messages", MessageViewSet, basename="messages")
-router.register("api/user", AccountViewset, basename="account")
+router.register("api/account", AccountViewset, basename="account")
 
 urlpatterns = [
     path("admin/", admin.site.urls),
