@@ -15,7 +15,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
-from account.views import AccountViewset
+from account.views import AccountViewset, JWTCookieTokenObtainPairView, JWTCookieTokenRefreshView
 from chat.consumer import ChatConsumer
 from chat.views import MessageViewSet
 from django.conf import settings
@@ -37,8 +37,8 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/docs/schema/", SpectacularAPIView.as_view(), name="schema_download"),
     path("api/docs/schema/ui/", SpectacularSwaggerView.as_view(), name="schema"),
-    path("api/token", TokenObtainPairView.as_view(), name="token_obtain_pair"),
-    path("api/token/refresh", TokenRefreshView.as_view(), name="token_refresh"),
+    path("api/token", JWTCookieTokenObtainPairView.as_view(), name="token_obtain_pair"),
+    path("api/token/refresh", JWTCookieTokenRefreshView.as_view(), name="token_refresh"),
 ]
 
 urlpatterns += [
