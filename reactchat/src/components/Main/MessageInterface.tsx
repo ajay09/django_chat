@@ -16,6 +16,7 @@ import {
 } from "@mui/material";
 import MessageInterfaceChannels from "./MessageInterfaceChannels";
 import Scroll from "./Scroll";
+import { useAuthService } from "../../services/AuthServices";
 
 interface ServerChannelProps {
   data: Server[];
@@ -49,6 +50,9 @@ const messageInterface = (props: ServerChannelProps) => {
     [],
     `/messages/?channel_id=${channelId}`
   );
+  const { logout, refreshAccessToken } = useAuthService();
+  const [reconnectionAttempt, setReconnectionAttempt] = useState(0);
+  const maxConnectionAttempts = 4;
 
   const socketUrl = channelId
     ? `ws://127.0.0.1:8000/ws/${serverId}/${channelId}`
@@ -68,8 +72,14 @@ const messageInterface = (props: ServerChannelProps) => {
     onClose: (event: CloseEvent) => {
       if (event.code == 4001) {
         console.log("Authentication Error!");
+        refreshAccessToken().catch((error) => {
+          if (error.response && error.response.status == 401) {
+            logout();
+          }
+        });
       }
       console.log("Closed!");
+      setReconnectionAttempt((prevAttempt) => prevAttempt + 1);
     },
     onError: () => {
       console.log("Error!");
@@ -80,6 +90,17 @@ const messageInterface = (props: ServerChannelProps) => {
       setNewMessage((prev_msg) => [...prev_msg, data.new_message]);
       setMessage("");
     },
+    shouldReconnect: (closeEvent) => {
+      if (
+        closeEvent.code === 4001 &&
+        reconnectionAttempt >= maxConnectionAttempts
+      ) {
+        setReconnectionAttempt(0);
+        return false;
+      }
+      return true;
+    },
+    reconnectInterval: 1000,
   });
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -102,7 +123,7 @@ const messageInterface = (props: ServerChannelProps) => {
     }
   };
 
-  function formatTimeStamp(timestamp: string) : string {
+  function formatTimeStamp(timestamp: string): string {
     const date = new Date(Date.parse(timestamp));
     const formattedDate = `${
       date.getMonth() + 1
