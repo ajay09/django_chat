@@ -65,7 +65,10 @@ const messageInterface = (props: ServerChannelProps) => {
         console.log(error);
       }
     },
-    onClose: () => {
+    onClose: (event: CloseEvent) => {
+      if (event.code == 4001) {
+        console.log("Authentication Error!");
+      }
       console.log("Closed!");
     },
     onError: () => {
