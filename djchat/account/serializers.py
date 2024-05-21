@@ -1,11 +1,29 @@
 from typing import Any, Dict
 
 from django.conf import settings
-from rest_framework.serializers import ModelSerializer
+from rest_framework.serializers import ModelSerializer, ValidationError
 from rest_framework_simplejwt.exceptions import InvalidToken
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer, TokenRefreshSerializer
 
 from .models import Account
+
+
+class RegisterSerializer(ModelSerializer):
+    class Meta:
+        model = Account
+        fields = ("username", "password")
+
+    def validate(self, attrs):
+        try:
+            Account.objects.get(username=attrs["username"])
+            raise ValidationError("username already exists")
+        except Account.DoesNotExist:
+            pass
+
+        return super().validate(attrs)
+
+    def create(self, validated_data):
+        return Account.objects.create_user(**validated_data)
 
 
 class AccountSerializer(ModelSerializer):

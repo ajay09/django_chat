@@ -1,5 +1,6 @@
 from django.conf import settings
 from drf_spectacular.utils import extend_schema
+from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -8,7 +9,29 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from .models import Account
 from .schema import user_list_docs
-from .serializers import AccountSerializer
+from .serializers import AccountSerializer, RegisterSerializer
+
+
+class RegisterAPIView(APIView):
+    def post(self, request, format=None):
+        serializer = RegisterSerializer(data=request.data)
+
+        if serializer.is_valid():
+            username = serializer.validated_data["username"]
+
+            forbidden_usernames = "admin,root,superuser".split(",")
+
+            if username in forbidden_usernames:
+                return Response({"error": "Username not allowed"}, status=status.HTTP_409_CONFLICT)
+
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            errors = serializer.errors
+            if "username" in errors and "non_field_errors" not in errors:
+                return Response({"error": "Username already exists"}, status=status.HTTP_409_CONFLICT)
+
+            return Response(errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class LogoutAPIView(APIView):

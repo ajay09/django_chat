@@ -27,7 +27,6 @@ class ChatConsumer(JsonWebsocketConsumer):
             return
 
         self.channel_id = self.scope.get("url_route")["kwargs"]["channel_id"]
-        self.user = User.objects.get(id=1)
 
         async_to_sync(self.channel_layer.group_add)(
             self.channel_id,

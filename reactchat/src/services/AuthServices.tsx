@@ -83,5 +83,19 @@ export function useAuthService(): AuthServiceProps {
     navigate("/login");
   };
 
-  return { login, isLoggedIn, logout, refreshAccessToken };
+  const register = async (username: string, password: string) =>{
+    try {
+        const response = await axios.post(
+            "http://127.0.0.1:8000/api/register", {
+                username,
+                password,
+        }, { withCredentials: true }
+        );
+        return response.status
+    } catch (err: any) {
+        return err.response.status;
+    }
+}
+
+  return { login, isLoggedIn, logout, refreshAccessToken, register };
 }
