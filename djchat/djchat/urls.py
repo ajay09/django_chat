@@ -15,7 +15,13 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
-from account.views import AccountViewset, JWTCookieTokenObtainPairView, JWTCookieTokenRefreshView, LogoutAPIView, RegisterAPIView
+from account.views import (
+    AccountViewset,
+    JWTCookieTokenObtainPairView,
+    JWTCookieTokenRefreshView,
+    LogoutAPIView,
+    RegisterAPIView,
+)
 from chat.consumer import ChatConsumer
 from chat.views import MessageViewSet
 from django.conf import settings
@@ -60,3 +66,4 @@ websocket_urlpatterns = [
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
